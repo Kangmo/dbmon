@@ -1,0 +1,26 @@
+IP=$1
+DB=$2
+USER=$3
+PASS=$4
+
+loop=1
+while [ $loop -le 100000 ]
+do
+    echo "[`date`] $loop th iteration."
+    procs_file="../log/procs-${loop}.list"
+    ./my-procs $IP $DB $USER $PASS | tee $procs_file
+
+    locked=`cat $procs_file | grep "lock" | wc -l` 
+    cat $procs_file
+
+    if [ $locked -gt 0 ] 
+    then
+        # play beep sound
+        ./bp
+        echo "Found locked query." 
+    fi
+    rm ./procs.list
+    sleep 1
+    loop=`expr $loop + 1`
+done
+

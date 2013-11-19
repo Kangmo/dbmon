@@ -1,0 +1,5 @@
+IP=$1
+DB=$2
+USER=$3
+PASS=$4
+mysql -h $IP -u $USER -p$PASS -e "use OPENX_V1_ADMIN; select 'my-proc', ID,USER,HOST,DB,COMMAND,TIME,STATE from information_schema.processlist where info is not null"
